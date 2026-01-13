@@ -20,8 +20,6 @@ CITY_CONFIG = {
     "Delhi": {
         "type": "inland",
         "location": "Delhi,IN",
-        "river_warning": 202.0,
-        "river_danger": 205.55,
         "lat": 28.6139,
         "lon": 77.2090
     },
@@ -129,10 +127,10 @@ if weather and river_level:
             st.warning("🟠 WARNING: River flooding is POSSIBLE.")
         else:
             st.success("🟢 River flooding is NOT EXPECTED.")
-    else:
-        if sea_level_anomaly > 0.4 and weather["precip"] > 50 and weather["windspeed"] > 30 and weather["humidity"]>80:
-            st.error("🔴 Coastal flooding VERY LIKELY (surge + rainfall).")
-        elif sea_level_anomaly > 0.2 and weather["precip"] > 30 and weather["windspeed"]> 14.5 and weather["humidity"] > 80:
+    elif city_info["type"] == "coastal":
+        if sea_level_anomaly > 0.4  and river_level>3.75 :
+            st.error("🔴 Coastal flooding VERY LIKELY.")
+        elif sea_level_anomaly > 0.2 and river_level>2.75:
             st.warning("🟠 Elevated sea level detected.")
         else:
             st.success("🟢 Coastal conditions stable.")
@@ -153,6 +151,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
