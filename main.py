@@ -133,7 +133,7 @@ if weather and river_level:
         else:
             st.success("🟢 River flooding is NOT EXPECTED.")
     else:
-        if sea_level_anomaly > 0.4 and weather["precip"] > 50 and and weather["windspeed"] > 30 and weather["humidity"]>=100:
+        if sea_level_anomaly > 0.4 and weather["precip"] > 50 and weather["windspeed"] > 30 and weather["humidity"]>=100:
             st.error("🔴 Coastal flooding VERY LIKELY (surge + rainfall).")
         elif sea_level_anomaly > 0.2 and weather["precip"] > 30 and weather["windspeed"]> 14.5 and weather["humidity"] > 80:
             st.warning("🟠 Elevated sea level detected.")
@@ -156,6 +156,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
