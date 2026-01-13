@@ -1,15 +1,19 @@
 import streamlit as st
 import pandas as pd
-import subprocess
 import requests
 from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
+@st.cache_data(ttl=86400)  # refresh once per day
+def load_sea_level_data():
+    return pd.read_csv("sea_level_daily.csv")
+
+sea_level_df = load_sea_level_data()
+
 # Page setup
 st.set_page_config(page_title="Flood Prediction System", layout="centered")
 st.title("🌊 Flood Prediction & Early Warning System")
-st.write("ML + Copernicus Marine Data (Global Ocean Model)")
 
 # City configuration
 CITY_CONFIG = {
@@ -42,6 +46,13 @@ CITY_CONFIG = {
 city = st.selectbox("📍 Select City / District", list(CITY_CONFIG.keys()))
 city_info = CITY_CONFIG[city]
 
+sea_level_anomaly = 0.0
+
+if city_info["type"] == "coastal":
+    city_sea = sea_level_df[sea_level_df["city"] == city]
+    if not city_sea.empty:
+        sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
+
 #Training the model
 def train_model():
     df = pd.read_csv("new_csv.csv")
@@ -63,7 +74,6 @@ river_level = st.number_input("🌊 Enter current river level (in meters):", min
 
 # ✅ Function to safely fetch weather data
 def fetch_weather_data(location):
-   # location = "Delhi,IN"
     today = datetime.now().strftime("%Y-%m-%d")
     api_key = "HC8QD5Y25CNY89PCZB3643W4X"
 
@@ -92,19 +102,6 @@ def fetch_weather_data(location):
 # Get weather
 weather = fetch_weather_data(city_info["location"])
 
-#Pushes updated CSV into github
-def push_csv_to_github(csv_path, commit_message="Update sea-level CSV"):
-    subprocess.run(["git", "add", csv_path])
-    subprocess.run(["git", "commit", "-m", commit_message])
-    subprocess.run(["git", "push", "origin", "main"])  # or your branch
-    print("✅ CSV pushed to GitHub")
-
-sla_df = pd.read_csv("sea_level_baselines.csv")  # stored in repo
-if city_info["type"] == "coastal":
-    # pick latest value for city
-    sea_level_anomaly = float(sla_df[sla_df["City"] == city]["Sea_Level_Anomaly"].iloc[-1])
-else:
-    sea_level_anomaly = 0.0    
 
 # Make prediction if both inputs are ready
 if weather and river_level:
@@ -133,7 +130,7 @@ if weather and river_level:
         else:
             st.success("🟢 River flooding is NOT EXPECTED.")
     else:
-        if sea_level_anomaly > 0.4 and weather["precip"] > 50 and weather["windspeed"] > 30 and weather["humidity"]>=100:
+        if sea_level_anomaly > 0.4 and weather["precip"] > 50 and weather["windspeed"] > 30 and weather["humidity"]>80:
             st.error("🔴 Coastal flooding VERY LIKELY (surge + rainfall).")
         elif sea_level_anomaly > 0.2 and weather["precip"] > 30 and weather["windspeed"]> 14.5 and weather["humidity"] > 80:
             st.warning("🟠 Elevated sea level detected.")
@@ -156,6 +153,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
