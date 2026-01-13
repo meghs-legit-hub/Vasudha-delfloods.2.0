@@ -112,7 +112,7 @@ def fetch_sea_surface_height(lat, lon):
             return 0.0
     return 0.0
 # Get weather
-weather = fetch_weather_data(city_info[location])
+weather = fetch_weather_data(city_info["location"])
 sea_level_anomaly = 0.0
 
 if city_info["type"] == "coastal":
@@ -169,6 +169,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
