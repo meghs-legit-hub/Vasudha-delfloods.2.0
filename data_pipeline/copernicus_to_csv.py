@@ -1,63 +1,54 @@
 import cdsapi
+import xarray as xr
 import pandas as pd
 from datetime import datetime
-import subprocess
 import os
 
+# City coordinates (same as Streamlit)
 CITIES = {
-    "Mumbai": {"lat": 18.9640, "lon": 72.8205},
-    "Chennai": {"lat": 13.0827, "lon": 80.2707}
+    "Mumbai": (18.9640, 72.8205),
+    "Chennai": (13.0827, 80.2707)
+}
 
-  CSV_PATH = "../sea_level_daily.csv"
+TODAY = datetime.utcnow().strftime("%Y-%m-%d")
 
-# DATE HANDLING (AUTO)
-# -----------------------
-today = datetime.utcnow().strftime("%Y-%m-%d")
+OUTPUT_CSV = "sea_level_daily.csv"
 
-# -----------------------
-# DOWNLOAD FROM COPERNICUS
-# -----------------------
-client = cdsapi.Client()
+def fetch_sea_level():
+    c = cdsapi.Client()
 
-nc_file = "sea_level_today.nc"
+    c.retrieve(
+        "satellite-sea-level-global",
+        {
+            "variable": "sea_surface_height_above_geoid",
+            "product_type": "daily_averaged",
+            "year": TODAY[:4],
+            "month": TODAY[5:7],
+            "day": TODAY[8:10],
+            "format": "netcdf"
+        },
+        "sea_level.nc"
+    )
 
-client.retrieve(
-    "cmems_obs-sl_glo_phy-ssh_my_allsat-l4-duacs-0.25deg_P1D",
-    {
-        "product_type": "daily",
-        "variable": "sea_surface_height_anomaly",
-        "year": today.split("-")[0],
-        "month": today.split("-")[1],
-        "day": today.split("-")[2],
-        "format": "netcdf"
-    },
-    nc_file
-)
+    ds = xr.open_dataset("sea_level.nc")
 
-# EXTRACT VALUES
-# NOTE:we use representative anomaly values
-rows = []
-for city in CITIES:
-    rows.append({
-        "date": today,
-        "city": city,
-        "sea_level_anomaly": round(0.3 + (hash(city) % 10) * 0.01, 2)
-    })
+    rows = []
 
-df_new = pd.DataFrame(rows)
+    for city, (lat, lon) in CITIES.items():
+        value = ds.sel(latitude=lat, longitude=lon, method="nearest")
+        sea_level = float(value["sea_surface_height_above_geoid"].values)
 
-# APPEND TO CSV
-if os.path.exists(CSV_PATH):
-    df_old = pd.read_csv(CSV_PATH)
-    df = pd.concat([df_old, df_new], ignore_index=True)
-else:
-    df = df_new
+        rows.append({
+            "date": TODAY,
+            "city": city,
+            "sea_level_anomaly": sea_level
+        })
 
-df.to_csv(CSV_PATH, index=False)
+    pd.DataFrame(rows).to_csv(OUTPUT_CSV, index=False)
 
-# PUSH TO GITHUB
-subprocess.run(["git", "add", CSV_PATH])
-subprocess.run(["git", "commit", "-m", f"Update sea level data {today}"])
-subprocess.run(["git", "push"])
+    os.remove("sea_level.nc")
+    print("✅ Sea level CSV updated:", OUTPUT_CSV)
 
-print("✅ Sea level CSV updated and pushed")
+if __name__ == "__main__":
+    fetch_sea_level()
+
