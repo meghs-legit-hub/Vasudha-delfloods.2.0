@@ -61,7 +61,7 @@ river_level = st.number_input("🌊 Enter current river level (in meters):", min
 
 
 # ✅ Function to safely fetch weather data
-def fetch_weather_data(city_info["location"]):
+def fetch_weather_data(location):
    # location = "Delhi,IN"
     today = datetime.now().strftime("%Y-%m-%d")
     api_key = "HC8QD5Y25CNY89PCZB3643W4X"
@@ -169,6 +169,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
