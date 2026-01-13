@@ -101,7 +101,7 @@ def fetch_sea_surface_height(lat, lon):
     response = requests.get(
         url,
         params=params,
-        auth=(st.secrets["COPERNICUS_USER"], st.secrets["COPERNICUS_PASS"])
+        auth=(st.secrets["mmathur"], st.secrets["46Uttaranchal@"])
     )
 
     if response.status_code == 200:
@@ -169,6 +169,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
