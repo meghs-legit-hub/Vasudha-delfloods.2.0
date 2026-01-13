@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import subprocess
 import requests
 from datetime import datetime
 from sklearn.model_selection import train_test_split
@@ -87,37 +88,23 @@ def fetch_weather_data(location):
             }
     return None
 
-#Copernicus Marine: Sea Surface Height Anomaly
-def fetch_sea_surface_height(lat, lon):
-    url = "https://my.cmems-du.eu/thredds/ncss/grid/global-analysis-forecast-phy-001-024/ssh"
-    params = {
-        "var": "zos",
-        "latitude": lat,
-        "longitude": lon,
-        "time": "latest",
-        "accept": "json"
-    }
 
-    response = requests.get(
-        url,
-        params=params,
-        auth=(st.secrets["COPERNICUS_USER"], st.secrets["COPERNICUS_PASS"])
-    )
-
-    if response.status_code == 200:
-        data = response.json()
-        try:
-            return float(data["data"][0]["zos"])
-        except:
-            return 0.0
-    return 0.0
 # Get weather
 weather = fetch_weather_data(city_info["location"])
-sea_level_anomaly = 0.0
 
+#Pushes updated CSV into github
+def push_csv_to_github(csv_path, commit_message="Update sea-level CSV"):
+    subprocess.run(["git", "add", csv_path])
+    subprocess.run(["git", "commit", "-m", commit_message])
+    subprocess.run(["git", "push", "origin", "main"])  # or your branch
+    print("✅ CSV pushed to GitHub")
+
+sla_df = pd.read_csv("sea_level_baselines.csv")  # stored in repo
 if city_info["type"] == "coastal":
-    sea_level_anomaly = fetch_sea_surface_height(city_info["lat"], city_info["lon"])
-    
+    # pick latest value for city
+    sea_level_anomaly = float(sla_df[sla_df["City"] == city]["Sea_Level_Anomaly"].iloc[-1])
+else:
+    sea_level_anomaly = 0.0    
 
 # Make prediction if both inputs are ready
 if weather and river_level:
@@ -146,9 +133,9 @@ if weather and river_level:
         else:
             st.success("🟢 River flooding is NOT EXPECTED.")
     else:
-        if sea_level_anomaly > 0.4 and weather["precip"] > 50:
+        if sea_level_anomaly > 0.4 and weather["precip"] > 50 and and weather["windspeed"] > 30 and weather["humidity"]>=100:
             st.error("🔴 Coastal flooding VERY LIKELY (surge + rainfall).")
-        elif sea_level_anomaly > 0.2:
+        elif sea_level_anomaly > 0.2 and weather["precip"] > 30 and weather["windspeed"]> 14.5 and weather["humidity"] > 80:
             st.warning("🟠 Elevated sea level detected.")
         else:
             st.success("🟢 Coastal conditions stable.")
@@ -169,6 +156,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
