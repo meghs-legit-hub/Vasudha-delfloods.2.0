@@ -1,0 +1,38 @@
+name: Daily Copernicus Sea Level Update
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: |
+        pip install cdsapi pandas xarray netCDF4
+
+    - name: Create Copernicus credentials
+      run: |
+        echo "url: https://cds.climate.copernicus.eu/api/v2" > ~/.cdsapirc
+        echo "key: ${{ secrets.COPERNICUS_KEY }}" >> ~/.cdsapirc
+
+    - name: Run Copernicus pipeline
+      run: python data_pipeline/copernicus_to_csv.py
+
+    - name: Commit CSV
+      run: |
+        git config user.name "github-actions"
+        git config user.email "actions@github.com"
+        git add sea_level_daily.csv
+        git commit -m "Daily sea level update" || echo "No changes"
+        git push
