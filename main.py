@@ -23,19 +23,30 @@ CITY_CONFIG = {
         "lat": 28.6139,
         "lon": 77.2090
     },
+    "Guwahati": {
+        "type": "inland",
+        "location": "Guwahati, IN",
+        "lat": 26.169141098717738, 
+        "lon": 91.71724913091863
+        
+    },
+    #one more inland
+    "Kochi": {
+        "type": "coastal",
+        "location": "Kochi,IN",
+        "lat": 9.930327510572434, 
+        "lon": 76.26445391748359
+    }
+    
     "Mumbai": {
         "type": "coastal",
         "location": "Mumbai,IN",
-        "river_warning": 3.5,
-        "river_danger": 4.5,
         "lat": 18.9640,
         "lon": 72.8205
     },
     "Chennai": {
         "type": "coastal",
         "location": "Chennai,IN",
-        "river_warning": 2.0,
-        "river_danger": 3.0,
         "lat": 13.0827,
         "lon": 80.2707
     }
@@ -151,6 +162,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
