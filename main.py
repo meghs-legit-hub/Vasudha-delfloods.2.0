@@ -30,13 +30,13 @@ CITY_CONFIG = {
         "lon": 91.71724913091863
         
     },
-    #one more inland
+    
     "Kochi": {
         "type": "coastal",
         "location": "Kochi,IN",
         "lat": 9.930327510572434, 
         "lon": 76.26445391748359
-    }
+    },
     
     "Mumbai": {
         "type": "coastal",
@@ -162,6 +162,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
