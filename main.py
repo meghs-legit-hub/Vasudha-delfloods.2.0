@@ -71,7 +71,7 @@ def train_model():
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
         model.fit(X_train, y_train)
-    elif city_info["location"] == "Guwahati,IN"
+    elif city_info["location"] == "Guwahati,IN":
         df = pd.read_csv("guwahati.csv") 
         A = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
         b = df['Flood']
@@ -189,6 +189,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
