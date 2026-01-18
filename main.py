@@ -64,13 +64,31 @@ if city_info["type"] == "coastal":
 
 #Training the model
 def train_model():
-    df = pd.read_csv("new_csv.csv")
-    X = df[['City', 'precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
-    y = df['Flood']
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
-    model.fit(X_train, y_train)
-    accuracy = model.score(X_test, y_test)
+    if city_info["location"] == "Delhi,IN":
+        df = pd.read_csv("delnew_csv.csv") 
+        X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+        y = df['Flood']
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model.fit(X_train, y_train)
+    elif city_info["location"] == "Guwahati,IN"
+        df = pd.read_csv("guwahati.csv") 
+        A = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+        b = df['Flood']
+        A_train, A_test, b_train, b_test = train_test_split(A, b, test_size=0.2, random_state=42)
+        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model.fit(A_train, b_train)
+
+    csv1 = pd.read_csv("delnew_csv.csv")
+    csv2 = pd.read_csv("guwahati.csv")
+
+# Combine datasets
+    combined = pd.concat([csv1, csv2], ignore_index=True)
+
+# Features and target
+    C = combined[['precip','River_Level','temp','humidity','windspeed']]
+    D = combined['Flood']  # 0,1,2
+    accuracy = model.score(C_test, D_test)
     return model, accuracy
 
 # Train model/test accuracy
@@ -171,6 +189,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
