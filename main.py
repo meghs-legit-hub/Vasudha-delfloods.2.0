@@ -132,12 +132,13 @@ if weather and river_level:
       # Show river level rule-based prediction
     st.subheader("📢 Flood Risk Assessment")
     if city_info["type"] == "inland":
-        if river_level > 205.55:
-            st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
-        elif river_level > 202:
-            st.warning("🟠 WARNING: River flooding is POSSIBLE.")
-        else:
-            st.success("🟢 River flooding is NOT EXPECTED.")
+        if CITY_CONFIG["location"] == "Delhi,IN":
+            if river_level > 205.55:
+                st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
+            elif river_level > 202:
+                st.warning("🟠 WARNING: River flooding is POSSIBLE.")
+            else:
+                st.success("🟢 River flooding is NOT EXPECTED.")
     elif city_info["type"] == "coastal":
         if sea_level_anomaly > 0.4  and river_level>3.75 :
             st.error("🔴 Coastal flooding VERY LIKELY.")
@@ -162,6 +163,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
