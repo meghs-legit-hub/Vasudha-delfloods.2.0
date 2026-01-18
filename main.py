@@ -65,7 +65,7 @@ if city_info["type"] == "coastal":
 #Training the model
 def train_model():
     df = pd.read_csv("new_csv.csv")
-    X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+    X = df[['City', 'precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
     y = df['Flood']
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
@@ -171,6 +171,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
