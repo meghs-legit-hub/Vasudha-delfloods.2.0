@@ -88,6 +88,7 @@ def train_model():
 # Features and target
     C = combined[['precip','River_Level','temp','humidity','windspeed']]
     D = combined['Flood']  # 0,1,2
+    C_train, C_test, D_train, D_test = train_test_split(C, D, test_size=0.2, random_state=42)
     D_pred = model.predict(C_test)
     accuracy = model.score(C_test, D_test)
     return model, accuracy
@@ -190,6 +191,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
