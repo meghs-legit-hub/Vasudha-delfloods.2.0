@@ -25,7 +25,7 @@ CITY_CONFIG = {
     },
     "Guwahati": {
         "type": "inland",
-        "location": "Guwahati, IN",
+        "location": "Guwahati,IN",
         "lat": 26.169141098717738, 
         "lon": 91.71724913091863
         
@@ -132,7 +132,7 @@ if weather and river_level:
       # Show river level rule-based prediction
     st.subheader("📢 Flood Risk Assessment")
     if city_info["type"] == "inland":
-        if CITY_CONFIG["location"] == "Delhi,IN":
+        if city_info["location"] == "Delhi,IN":
             if river_level > 205.55:
                 st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
             elif river_level > 202:
@@ -163,6 +163,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
