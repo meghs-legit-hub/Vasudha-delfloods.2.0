@@ -6,10 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 #@st.cache_data(ttl=86400)  # refresh once per day
-#def load_sea_level_data():
-#    return pd.read_csv("sea_level_daily.csv")
+def load_sea_level_data():
+    return pd.read_csv("sea_level_daily.csv")
 
-#sea_level_df = load_sea_level_data()
+sea_level_df = load_sea_level_data()
 
 # Page setup
 st.set_page_config(page_title="Flood Prediction System", layout="centered")
@@ -55,12 +55,12 @@ CITY_CONFIG = {
 city = st.selectbox("📍 Select City / District", list(CITY_CONFIG.keys()))
 city_info = CITY_CONFIG[city]
 
-#sea_level_anomaly = 0.0
+sea_level_anomaly = 0.0
 
-#if city_info["type"] == "coastal":
-#    city_sea = sea_level_df[sea_level_df["city"] == city]
-#    if not city_sea.empty:
-#        sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
+if city_info["type"] == "coastal":
+    city_sea = sea_level_df[sea_level_df["city"] == city]
+    if not city_sea.empty:
+        sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
 
 # Training the model
 def train_model():
@@ -191,5 +191,6 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
