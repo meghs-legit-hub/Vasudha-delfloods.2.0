@@ -120,7 +120,7 @@ def fetch_weather_data(location):
         if "days" in data and len(data["days"]) > 0:
             today_data = data["days"][0]
             return {
-                "Precip": today_data.get("precip") or 0.0,
+                "precip": today_data.get("precip") or 0.0,
                 "temp": today_data.get("temp") or 0.0,
                 "humidity": today_data.get("humidity") or 0.0,
                 "windspeed": today_data.get("windspeed") or 0.0
@@ -191,4 +191,5 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
