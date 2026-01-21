@@ -72,7 +72,7 @@ def train_model():
         model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
         model.fit(X_train, y_train)
     elif city_info["location"] == "Jalpaiguri,IN":
-        df = pd.read_csv("guwahati.csv") 
+        df = pd.read_csv("jalpaiguri.csv") 
         A = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
         b = df['Flood']
         A_train, A_test, b_train, b_test = train_test_split(A, b, test_size=0.2, random_state=42)
@@ -80,7 +80,7 @@ def train_model():
         model.fit(A_train, b_train)
 
     csv1 = pd.read_csv("delnew_csv.csv")
-    csv2 = pd.read_csv("guwahati.csv")
+    csv2 = pd.read_csv("jalpaiguri.csv")
 
 # Combine datasets
     combined = pd.concat([csv1, csv2], ignore_index=True)
@@ -159,7 +159,7 @@ if weather and river_level:
                 st.warning("🟠 WARNING: River flooding is POSSIBLE.")
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
-        elif city_info["location"] == "Guwahati,IN":
+        elif city_info["location"] == "Jalpaiguri,IN":
             if river_level > 50:
                 st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
             elif river_level > 48.9:
@@ -191,6 +191,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
