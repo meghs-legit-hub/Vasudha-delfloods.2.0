@@ -25,7 +25,7 @@ CITY_CONFIG = {
     },
     "Jalpaiguri": {
         "type": "inland",
-        "location": "Guwahati,IN",
+        "location": "Jalpaiguri,IN",
         "lat": 26.523652454077087, 
         "lon": 88.7287456762074 
         
@@ -191,6 +191,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
