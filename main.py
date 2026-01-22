@@ -160,9 +160,9 @@ if weather and river_level:
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
         elif city_info["location"] == "Jalpaiguri,IN":
-            if river_level > 50:
+            if river_level > 89.3:
                 st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
-            elif river_level > 48.9:
+            elif river_level > 86.5:
                 st.warning("🟠 WARNING: River flooding is POSSIBLE.")
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
@@ -191,6 +191,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
