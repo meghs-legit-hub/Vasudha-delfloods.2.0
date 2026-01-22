@@ -90,6 +90,9 @@ def train_model3():
         return model3, accuracy3
 
 # Train model/test accuracy
+model1, accuracy1 =  train_model1()
+model2, accuracy2 =  train_model2()
+model3, accuracy3 =  train_model1()
 
 # Input for river level
 river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, step=0.1) 
@@ -193,6 +196,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
