@@ -56,38 +56,38 @@ if city_info["type"] == "coastal":
         sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
 
 # Training the model
-def train_model():
+def train_model1():
     if city_info["location"] == "Delhi,IN":
         df = pd.read_csv("delnew_csv.csv") 
         X = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
         y = df['Flood']
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
-        model.fit(X_train, y_train)
-        accuracy = model.score(X_test, y_test)
-        return model, accuracy
+        model1 = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model1.fit(X_train, y_train)
+        accuracy1 = model1.score(X_test, y_test)
+        return model1, accuracy1
 
-def train_model():
+def train_model2():
     if city_info["location"] == "Jalpaiguri,IN":
         dJ = pd.read_csv("jalpaiguri.csv") 
         A = dJ[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
         b = dJ['Flood']
         A_train, A_test, b_train, b_test = train_test_split(A, b, test_size=0.2, random_state=42)
-        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
-        model.fit(A_train, b_train)
-        accuracy = model.score(A_test, b_test)
-        return model, accuracy
+        model2 = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model2.fit(A_train, b_train)
+        accuracy2 = model2.score(A_test, b_test)
+        return model2, accuracy2
 
-def train_model():
+def train_model3():
     if city_info["location"] == "Mumbai,IN":
         dM = pd.read_csv("Mumbai.csv") 
         C = dM[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
         d = dM['Flood']
         C_train, C_test, d_train, d_test = train_test_split(C, d, test_size=0.2, random_state=42)
-        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
-        model.fit(C_train, d_train)
-        accuracy = model.score(C_test, d_test)
-        return model, accuracy
+        model3 = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model3.fit(C_train, d_train)
+        accuracy3 = model3.score(C_test, d_test)
+        return model3, accuracy3
 
 # Train model/test accuracy
 model, accuracy = train_model()
@@ -187,6 +187,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
