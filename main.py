@@ -183,11 +183,12 @@ if weather and river_level:
     else:
         st.success("✅ Model says: NO FLOOD expected today.")
 
-st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
+#st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
