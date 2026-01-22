@@ -155,7 +155,6 @@ if weather and river_level:
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
             model1, accuracy1 = train_model1()
-            return
 
         elif city_info["location"] == "Jalpaiguri,IN":
             if river_level > 87:
@@ -191,6 +190,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
