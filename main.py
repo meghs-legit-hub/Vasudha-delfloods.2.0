@@ -30,14 +30,7 @@ CITY_CONFIG = {
         "lon": 88.7287456762074 
         
     },
-    
-    "Kochi": {
-        "type": "coastal",
-        "location": "Kochi,IN",
-        "lat": 9.930327510572434, 
-        "lon": 76.26445391748359
-    },
-    
+        
     "Mumbai": {
         "type": "coastal",
         "location": "Mumbai,IN",
@@ -71,27 +64,8 @@ def train_model():
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
         model.fit(X_train, y_train)
-    elif city_info["location"] == "Jalpaiguri,IN":
-        df = pd.read_csv("jalpaiguri.csv") 
-        A = df[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
-        b = df['Flood']
-        A_train, A_test, b_train, b_test = train_test_split(A, b, test_size=0.2, random_state=42)
-        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
-        model.fit(A_train, b_train)
-
-    csv1 = pd.read_csv("delnew_csv.csv")
-    csv2 = pd.read_csv("jalpaiguri.csv")
-
-# Combine datasets
-    combined = pd.concat([csv1, csv2], ignore_index=True)
-
-# Features and target
-    C = combined[['precip','River_Level','temp','humidity','windspeed']]
-    D = combined['Flood']  # 0,1,2
-    C_train, C_test, D_train, D_test = train_test_split(C, D, test_size=0.2, random_state=42)
-    D_pred = model.predict(C_test)
-    accuracy = model.score(C_test, D_test)
-    return model, accuracy
+        accuracy = model.score(X_test, y_test)
+        return model, accuracy
 
 # Train model/test accuracy
 model, accuracy = train_model()
@@ -191,6 +165,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
