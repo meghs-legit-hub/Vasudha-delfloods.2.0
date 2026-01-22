@@ -80,8 +80,8 @@ def train_model2():
 
 def train_model3():
     if city_info["location"] == "Mumbai,IN":
-        dM = pd.read_csv("Mumbai.csv") 
-        C = dM[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+        dM = pd.read_csv("mumbai.csv") 
+        C = dM[['precip', 'Sea_Level_Anomaly', 'temp', 'humidity', 'windspeed']]
         d = dM['Flood']
         C_train, C_test, d_train, d_test = train_test_split(C, d, test_size=0.2, random_state=42)
         model3 = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
@@ -193,6 +193,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
