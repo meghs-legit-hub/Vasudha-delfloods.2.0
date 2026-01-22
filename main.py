@@ -144,6 +144,7 @@ if weather and river_level:
         'windspeed': weather['windspeed']
     }])
 
+    
       # Show river level rule-based prediction
     st.subheader("📢 Flood Risk Assessment")
     if city_info["type"] == "inland":
@@ -155,6 +156,7 @@ if weather and river_level:
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
             model1, accuracy1 = train_model1()
+            print(accuracy1)
 
         elif city_info["location"] == "Jalpaiguri,IN":
             if river_level > 87:
@@ -184,13 +186,14 @@ if weather and river_level:
                 st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
             else:
                 st.success("✅ Model says: NO FLOOD expected today.")
-            print(accuracy1)
+            
 
 #st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
