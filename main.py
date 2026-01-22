@@ -155,6 +155,7 @@ if weather and river_level:
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
             model1, accuracy1 = train_model1()
+            return
 
         elif city_info["location"] == "Jalpaiguri,IN":
             if river_level > 87:
@@ -174,20 +175,23 @@ if weather and river_level:
 
 
      # Also run the model prediction
-    prediction = model.predict(input_data)[0]
-    st.subheader("📊 Model-Based Prediction:")
-    if prediction == 2:
-        st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-    elif prediction == 1:
-        st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-    else:
-        st.success("✅ Model says: NO FLOOD expected today.")
+    if city_info["type"] == "inland":
+        if city_info["location"] == "Delhi,IN":
+            prediction1 = model1.predict(input_data)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction1 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction1 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
 
 #st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
