@@ -90,10 +90,12 @@ def train_model3():
         return model3, accuracy3
 
 # Train model/test accuracy
-model1, accuracy1 =  train_model1()
-model2, accuracy2 =  train_model2()
-model3, accuracy3 =  train_model1()
-
+if city_info["location"] == "Delhi,IN":
+    model1, accuracy1 = train_model1()
+elif city_info["location"] == "Jalpaiguri,IN":
+    model2, accuracy2 = train_model2()
+elif city_info["location"] == "Mumbai,IN":
+    model3, accuracy3 = train_model3()
 # Input for river level
 river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, step=0.1) 
 #river_level = st.number_input(f"🌊 Enter river level for {city} (meters)",min_value=0.0,step=0.1)
@@ -196,6 +198,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
