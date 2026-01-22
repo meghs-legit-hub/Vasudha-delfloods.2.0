@@ -67,6 +67,28 @@ def train_model():
         accuracy = model.score(X_test, y_test)
         return model, accuracy
 
+def train_model():
+    if city_info["location"] == "Jalpaiguri,IN":
+        dJ = pd.read_csv("jalpaiguri.csv") 
+        A = dJ[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+        b = dJ['Flood']
+        A_train, A_test, b_train, b_test = train_test_split(A, b, test_size=0.2, random_state=42)
+        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model.fit(A_train, b_train)
+        accuracy = model.score(A_test, b_test)
+        return model, accuracy
+
+def train_model():
+    if city_info["location"] == "Mumbai,IN":
+        dM = pd.read_csv("Mumbai.csv") 
+        C = dM[['precip', 'River_Level', 'temp', 'humidity', 'windspeed']]
+        d = dM['Flood']
+        C_train, C_test, d_train, d_test = train_test_split(C, d, test_size=0.2, random_state=42)
+        model = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model.fit(C_train, d_train)
+        accuracy = model.score(C_test, d_test)
+        return model, accuracy
+
 # Train model/test accuracy
 model, accuracy = train_model()
 
@@ -165,6 +187,7 @@ st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
