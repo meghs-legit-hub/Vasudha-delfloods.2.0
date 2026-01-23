@@ -91,7 +91,7 @@ def train_model3():
         
 def train_model4():
     if city_info["location"] == "Chennai,IN":
-        dC = pd.read_csv("channai.csv") 
+        dC = pd.read_csv("chennai.csv") 
         P = dC[['precip', 'Sea_Level_Anomaly', 'temp', 'humidity', 'windspeed']]
         q = dC['Flood']
         P_train, P_test, q_train, q_test = train_test_split(P, q, test_size=0.2, random_state=42)
@@ -166,6 +166,7 @@ if city_info["type"] == "inland":
         'humidity': weather['humidity'],
         'windspeed': weather['windspeed']
     }])
+    
 elif city_info["type"] == "coastal":    
     input_data2 = pd.DataFrame([{
         'precip': weather['precip'],
@@ -260,6 +261,7 @@ elif city_info["type"] == "coastal":
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
