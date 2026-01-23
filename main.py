@@ -5,12 +5,6 @@ from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
-#@st.cache_data(ttl=86400)  # refresh once per day
-#def load_sea_level_data():
-#    return pd.read_csv("sea_level_daily.csv")
-
-#sea_level_df = load_sea_level_data()
-
 # Page setup
 st.set_page_config(page_title="Flood Prediction System", layout="centered")
 st.title("🌊 Flood Prediction & Early Warning System")
@@ -47,13 +41,6 @@ CITY_CONFIG = {
 
 city = st.selectbox("📍 Select City / District", list(CITY_CONFIG.keys()))
 city_info = CITY_CONFIG[city]
-
-#sea_level_anomaly = 0.0
-
-#if city_info["type"] == "coastal":
-#    city_sea = sea_level_df[sea_level_df["city"] == city]
-#    if not city_sea.empty:
-#        sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
 
 # Training the model
 def train_model1():
@@ -115,8 +102,6 @@ if city_info['type'] == 'inland':
     river_level = st.number_input("🌊 Enter current River Level (in meters):", min_value=0.0, step=0.1)
 elif city_info['type'] == 'coastal':
     sea_level_anomaly = st.number_input("🌊 Enter current Sea Level Anomaly (in meters):", min_value=0.0, step=0.1)
-#river_level = st.number_input(f"🌊 Enter river level for {city} (meters)",min_value=0.0,step=0.1)
-
 
 # ✅ Function to safely fetch weather data
 def fetch_weather_data(location):
@@ -144,25 +129,19 @@ def fetch_weather_data(location):
             }
     return None
 
-
 # Get weather
 weather = fetch_weather_data(city_info["location"])
 
 ready = False
-
 if city_info["type"] == "inland":
     ready = weather is not None and river_level > 0
-
 elif city_info["type"] == "coastal":
     ready = weather is not None and sea_level_anomaly > 0
-
 
 # Make prediction if both inputs are ready
 if ready:
     st.subheader("📊 Today's Weather Data:") #st.subheader("📊 Live Environmental Data")
     st.json(weather)
-    #    if city_info["type"] == "coastal":
-    #        st.write(f"🌊 Sea Surface Height Anomaly (Copernicus): "f"**{round(sea_level_anomaly, 2)} m**")
     # Format data for prediction
     if city_info["type"] == "inland":
         input_data1 = pd.DataFrame([{
@@ -192,8 +171,6 @@ if ready:
                 st.warning("🟠 WARNING: River flooding is POSSIBLE.")
             else:
                 st.success("🟢 River flooding is NOT EXPECTED.")
-                
-                
             
         elif city_info["location"] == "Jalpaiguri,IN":
             if river_level > 87:
@@ -220,7 +197,6 @@ if ready:
             else:
                 st.success("🟢 Coastal conditions stable.")
     
-    
          # Also run the model prediction
     if city_info["type"] == "inland":
         if city_info["location"] == "Delhi,IN":
@@ -242,6 +218,7 @@ if ready:
                 st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
             else:
                 st.success("✅ Model says: NO FLOOD expected today.")
+                
     elif city_info["type"] == "coastal":
         if city_info["location"] == "Mumbai,IN":
             prediction3 = model3.predict(input_data2)[0]
@@ -267,8 +244,6 @@ if ready:
 #st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
 
 
-
-#st.write("✅ Model accuracy on test data:", accuracy)
 
 
 
