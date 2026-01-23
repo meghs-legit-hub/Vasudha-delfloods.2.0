@@ -222,45 +222,46 @@ if ready:
     
     
          # Also run the model prediction
-        if city_info["type"] == "inland":
-            if city_info["location"] == "Delhi,IN":
-                prediction1 = model1.predict(input_data1)[0]
-                st.subheader("📊 Model-Based Prediction:")
-                if prediction1 == 2:
-                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-                elif prediction1 == 1:
-                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-                else:
-                    st.success("✅ Model says: NO FLOOD expected today.")
+    if city_info["type"] == "inland":
+        if city_info["location"] == "Delhi,IN":
+            prediction1 = model1.predict(input_data1)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction1 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction1 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
        
-            elif city_info["location"] == "Jalpaiguri,IN":
-                prediction2 = model2.predict(input_data1)[0]
-                st.subheader("📊 Model-Based Prediction:")
-                if prediction2 == 2:
-                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-                elif prediction2 == 1:
-                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-                else:
-                    st.success("✅ Model says: NO FLOOD expected today.")
-        elif city_info["type"] == "coastal":
-            if city_info["location"] == "Mumbai,IN":
-                prediction3 = model3.predict(input_data2)[0]
-                st.subheader("📊 Model-Based Prediction:")
-                if prediction3 == 2:
-                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-                elif prediction3 == 1:
-                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-                else:
-                    st.success("✅ Model says: NO FLOOD expected today.")
-            elif city_info["location"] == "Chennai,IN":
-                prediction4 = model4.predict(input_data2)[0]
-                st.subheader("📊 Model-Based Prediction:")
-                if prediction4 == 2:
-                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-                elif prediction4 == 1:
-                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-                else:
-                    st.success("✅ Model says: NO FLOOD expected today.")
+        elif city_info["location"] == "Jalpaiguri,IN":
+            prediction2 = model2.predict(input_data1)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction2 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction2 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
+    elif city_info["type"] == "coastal":
+        if city_info["location"] == "Mumbai,IN":
+            prediction3 = model3.predict(input_data2)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction3 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction3 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
+            
+        elif city_info["location"] == "Chennai,IN":
+            prediction4 = model4.predict(input_data2)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction4 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction4 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
             
 
 #st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
@@ -268,6 +269,7 @@ if ready:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
