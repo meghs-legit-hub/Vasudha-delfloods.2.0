@@ -148,112 +148,118 @@ def fetch_weather_data(location):
 # Get weather
 weather = fetch_weather_data(city_info["location"])
 
+ready = False
+
+if city_info["type"] == "inland":
+    ready = weather is not None and river_level > 0
+
+elif city_info["type"] == "coastal":
+    ready = weather is not None and sea_level_anomaly > 0
+
 
 # Make prediction if both inputs are ready
-if weather and river_level:
+if ready:
     st.subheader("📊 Today's Weather Data:") #st.subheader("📊 Live Environmental Data")
     st.json(weather)
-
-#    if city_info["type"] == "coastal":
-#        st.write(f"🌊 Sea Surface Height Anomaly (Copernicus): "f"**{round(sea_level_anomaly, 2)} m**")
-
+    #    if city_info["type"] == "coastal":
+    #        st.write(f"🌊 Sea Surface Height Anomaly (Copernicus): "f"**{round(sea_level_anomaly, 2)} m**")
     # Format data for prediction
-if city_info["type"] == "inland":
-    input_data1 = pd.DataFrame([{
-        'precip': weather['precip'],
-        'River_Level': river_level,
-        'temp': weather['temp'],
-        'humidity': weather['humidity'],
-        'windspeed': weather['windspeed']
-    }])
-    
-elif city_info["type"] == "coastal":    
-    input_data2 = pd.DataFrame([{
-        'precip': weather['precip'],
-        'Sea_Level_Anomaly': sea_level_anomaly,
-        'temp': weather['temp'],
-        'humidity': weather['humidity'],
-        'windspeed': weather['windspeed']
-    }])
-    
-      # Show river level rule-based prediction
-    st.subheader("📢 Flood Risk Assessment")
     if city_info["type"] == "inland":
-        if city_info["location"] == "Delhi,IN":
-            if river_level > 205.55:
-                st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
-            elif river_level > 202:
-                st.warning("🟠 WARNING: River flooding is POSSIBLE.")
-            else:
-                st.success("🟢 River flooding is NOT EXPECTED.")
-            
-            
+        input_data1 = pd.DataFrame([{
+            'precip': weather['precip'],
+            'River_Level': river_level,
+            'temp': weather['temp'],
+            'humidity': weather['humidity'],
+            'windspeed': weather['windspeed']
+        }])
         
-        elif city_info["location"] == "Jalpaiguri,IN":
-            if river_level > 87:
-                st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
-            elif river_level > 85.1:
-                st.warning("🟠 WARNING: River flooding is POSSIBLE.")
-            else:
-                st.success("🟢 River flooding is NOT EXPECTED.")
+    elif city_info["type"] == "coastal":    
+        input_data2 = pd.DataFrame([{
+            'precip': weather['precip'],
+            'Sea_Level_Anomaly': sea_level_anomaly,
+            'temp': weather['temp'],
+            'humidity': weather['humidity'],
+            'windspeed': weather['windspeed']
+        }])
+        
+          # Show river level rule-based prediction
+        st.subheader("📢 Flood Risk Assessment")
+        if city_info["type"] == "inland":
+            if city_info["location"] == "Delhi,IN":
+                if river_level > 205.55:
+                    st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
+                elif river_level > 202:
+                    st.warning("🟠 WARNING: River flooding is POSSIBLE.")
+                else:
+                    st.success("🟢 River flooding is NOT EXPECTED.")
+                
+                
             
-    elif city_info["type"] == "coastal":
-        if city_info["location"] == "Mumbai,IN":
-            if sea_level_anomaly > 0.4:
-                st.error("🔴 Coastal flooding VERY LIKELY.")
-            elif sea_level_anomaly > 0.3:
-                st.warning("🟠 Elevated sea level detected.")
-            else:
-                st.success("🟢 Coastal conditions stable.")
-        elif city_info["location"] == "Chennai,IN":
-            if sea_level_anomaly > 1.2:
-                st.error("🔴 Coastal flooding VERY LIKELY.")
-            elif sea_level_anomaly > 1.0:
-                st.warning("🟠 Elevated sea level detected.")
-            else:
-                st.success("🟢 Coastal conditions stable.")
-
-
-     # Also run the model prediction
-    if city_info["type"] == "inland":
-        if city_info["location"] == "Delhi,IN":
-            prediction1 = model1.predict(input_data1)[0]
-            st.subheader("📊 Model-Based Prediction:")
-            if prediction1 == 2:
-                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-            elif prediction1 == 1:
-                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-            else:
-                st.success("✅ Model says: NO FLOOD expected today.")
-   
-        elif city_info["location"] == "Jalpaiguri,IN":
-            prediction2 = model2.predict(input_data1)[0]
-            st.subheader("📊 Model-Based Prediction:")
-            if prediction2 == 2:
-                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-            elif prediction2 == 1:
-                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-            else:
-                st.success("✅ Model says: NO FLOOD expected today.")
-    elif city_info["type"] == "coastal":
-        if city_info["location"] == "Mumbai,IN":
-            prediction3 = model3.predict(input_data2)[0]
-            st.subheader("📊 Model-Based Prediction:")
-            if prediction3 == 2:
-                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-            elif prediction3 == 1:
-                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-            else:
-                st.success("✅ Model says: NO FLOOD expected today.")
-        elif city_info["location"] == "Chennai,IN":
-            prediction4 = model4.predict(input_data2)[0]
-            st.subheader("📊 Model-Based Prediction:")
-            if prediction4 == 2:
-                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
-            elif prediction4 == 1:
-                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
-            else:
-                st.success("✅ Model says: NO FLOOD expected today.")
+            elif city_info["location"] == "Jalpaiguri,IN":
+                if river_level > 87:
+                    st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
+                elif river_level > 85.1:
+                    st.warning("🟠 WARNING: River flooding is POSSIBLE.")
+                else:
+                    st.success("🟢 River flooding is NOT EXPECTED.")
+                
+        elif city_info["type"] == "coastal":
+            if city_info["location"] == "Mumbai,IN":
+                if sea_level_anomaly > 0.4:
+                    st.error("🔴 Coastal flooding VERY LIKELY.")
+                elif sea_level_anomaly > 0.3:
+                    st.warning("🟠 Elevated sea level detected.")
+                else:
+                    st.success("🟢 Coastal conditions stable.")
+            elif city_info["location"] == "Chennai,IN":
+                if sea_level_anomaly > 1.2:
+                    st.error("🔴 Coastal flooding VERY LIKELY.")
+                elif sea_level_anomaly > 1.0:
+                    st.warning("🟠 Elevated sea level detected.")
+                else:
+                    st.success("🟢 Coastal conditions stable.")
+    
+    
+         # Also run the model prediction
+        if city_info["type"] == "inland":
+            if city_info["location"] == "Delhi,IN":
+                prediction1 = model1.predict(input_data1)[0]
+                st.subheader("📊 Model-Based Prediction:")
+                if prediction1 == 2:
+                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+                elif prediction1 == 1:
+                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+                else:
+                    st.success("✅ Model says: NO FLOOD expected today.")
+       
+            elif city_info["location"] == "Jalpaiguri,IN":
+                prediction2 = model2.predict(input_data1)[0]
+                st.subheader("📊 Model-Based Prediction:")
+                if prediction2 == 2:
+                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+                elif prediction2 == 1:
+                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+                else:
+                    st.success("✅ Model says: NO FLOOD expected today.")
+        elif city_info["type"] == "coastal":
+            if city_info["location"] == "Mumbai,IN":
+                prediction3 = model3.predict(input_data2)[0]
+                st.subheader("📊 Model-Based Prediction:")
+                if prediction3 == 2:
+                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+                elif prediction3 == 1:
+                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+                else:
+                    st.success("✅ Model says: NO FLOOD expected today.")
+            elif city_info["location"] == "Chennai,IN":
+                prediction4 = model4.predict(input_data2)[0]
+                st.subheader("📊 Model-Based Prediction:")
+                if prediction4 == 2:
+                    st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+                elif prediction4 == 1:
+                    st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+                else:
+                    st.success("✅ Model says: NO FLOOD expected today.")
             
 
 #st.write("✅ Model accuracy:", round(accuracy * 100, 2), "%")
@@ -261,6 +267,7 @@ elif city_info["type"] == "coastal":
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
