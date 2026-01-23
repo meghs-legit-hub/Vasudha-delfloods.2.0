@@ -150,7 +150,7 @@ weather = fetch_weather_data(city_info["location"])
 
 
 # Make prediction if both inputs are ready
-if weather:
+if weather is not None:
     st.subheader("📊 Today's Weather Data:") #st.subheader("📊 Live Environmental Data")
     st.json(weather)
 
@@ -261,6 +261,7 @@ elif city_info["type"] == "coastal":
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
