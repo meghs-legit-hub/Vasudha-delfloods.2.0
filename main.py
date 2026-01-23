@@ -158,6 +158,7 @@ if weather:
 #        st.write(f"🌊 Sea Surface Height Anomaly (Copernicus): "f"**{round(sea_level_anomaly, 2)} m**")
 
     # Format data for prediction
+if city_info["type"] == "inland":
     input_data1 = pd.DataFrame([{
         'precip': weather['precip'],
         'River_Level': river_level,
@@ -165,7 +166,7 @@ if weather:
         'humidity': weather['humidity'],
         'windspeed': weather['windspeed']
     }])
-
+elif city_info["type"] == "coastal":    
     input_data2 = pd.DataFrame([{
         'precip': weather['precip'],
         'Sea_Level_Anomaly': sea_level_anomaly,
@@ -259,6 +260,7 @@ if weather:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
