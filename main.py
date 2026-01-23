@@ -168,7 +168,7 @@ if weather:
 
     input_data2 = pd.DataFrame([{
         'precip': weather['precip'],
-        'Sea_Level_Anomaly': Sea_Level_Anomaly,
+        'Sea_Level_Anomaly': sea_level_anomaly,
         'temp': weather['temp'],
         'humidity': weather['humidity'],
         'windspeed': weather['windspeed']
@@ -259,6 +259,7 @@ if weather:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
