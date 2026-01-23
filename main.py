@@ -172,7 +172,7 @@ if weather and river_level:
         'temp': weather['temp'],
         'humidity': weather['humidity'],
         'windspeed': weather['windspeed']
-
+    }])
     
       # Show river level rule-based prediction
     st.subheader("📢 Flood Risk Assessment")
@@ -251,6 +251,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
