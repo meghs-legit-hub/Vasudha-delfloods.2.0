@@ -6,10 +6,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
 #@st.cache_data(ttl=86400)  # refresh once per day
-def load_sea_level_data():
-    return pd.read_csv("sea_level_daily.csv")
+#def load_sea_level_data():
+#    return pd.read_csv("sea_level_daily.csv")
 
-sea_level_df = load_sea_level_data()
+#sea_level_df = load_sea_level_data()
 
 # Page setup
 st.set_page_config(page_title="Flood Prediction System", layout="centered")
@@ -48,12 +48,12 @@ CITY_CONFIG = {
 city = st.selectbox("📍 Select City / District", list(CITY_CONFIG.keys()))
 city_info = CITY_CONFIG[city]
 
-sea_level_anomaly = 0.0
+#sea_level_anomaly = 0.0
 
-if city_info["type"] == "coastal":
-    city_sea = sea_level_df[sea_level_df["city"] == city]
-    if not city_sea.empty:
-        sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
+#if city_info["type"] == "coastal":
+#    city_sea = sea_level_df[sea_level_df["city"] == city]
+#    if not city_sea.empty:
+#        sea_level_anomaly = float(city_sea.iloc[-1]["sea_level_anomaly"])
 
 # Training the model
 def train_model1():
@@ -88,6 +88,17 @@ def train_model3():
         model3.fit(C_train, d_train)
         accuracy3 = model3.score(C_test, d_test)
         return model3, accuracy3
+        
+def train_model4():
+    if city_info["location"] == "Chennai,IN":
+        dC = pd.read_csv("channai.csv") 
+        P = dC[['precip', 'Sea_Level_Anomaly', 'temp', 'humidity', 'windspeed']]
+        q = dC['Flood']
+        P_train, P_test, q_train, q_test = train_test_split(P, q, test_size=0.2, random_state=42)
+        model4 = RandomForestClassifier(n_estimators=100) #random_state=42 after 100?
+        model4.fit(P_train, q_train)
+        accuracy4 = model4.score(P_test, q_test)
+        return model4, accuracy4
 
 # Train model/test accuracy
 if city_info["location"] == "Delhi,IN":
@@ -96,8 +107,14 @@ elif city_info["location"] == "Jalpaiguri,IN":
     model2, accuracy2 = train_model2()
 elif city_info["location"] == "Mumbai,IN":
     model3, accuracy3 = train_model3()
+elif city_info["location"] == "Chennai,IN":
+    model4, accuracy4 = train_model4()
+    
 # Input for river level
-river_level = st.number_input("🌊 Enter current river level (in meters):", min_value=0.0, step=0.1) 
+if city_info['type'] == 'inland':
+    river_level = st.number_input("🌊 Enter current River Level (in meters):", min_value=0.0, step=0.1)
+elif city_info['type'] == 'coastal':
+    sea_level_anomaly = st.number_input("🌊 Enter current Sea Level Anomaly (in meters):", min_value=0.0, step=0.1)
 #river_level = st.number_input(f"🌊 Enter river level for {city} (meters)",min_value=0.0,step=0.1)
 
 
@@ -137,17 +154,24 @@ if weather and river_level:
     st.subheader("📊 Today's Weather Data:") #st.subheader("📊 Live Environmental Data")
     st.json(weather)
 
-    if city_info["type"] == "coastal":
-        st.write(f"🌊 Sea Surface Height Anomaly (Copernicus): "f"**{round(sea_level_anomaly, 2)} m**")
+#    if city_info["type"] == "coastal":
+#        st.write(f"🌊 Sea Surface Height Anomaly (Copernicus): "f"**{round(sea_level_anomaly, 2)} m**")
 
     # Format data for prediction
-    input_data = pd.DataFrame([{
+    input_data1 = pd.DataFrame([{
         'precip': weather['precip'],
         'River_Level': river_level,
         'temp': weather['temp'],
         'humidity': weather['humidity'],
         'windspeed': weather['windspeed']
     }])
+
+    input_data2 = pd.DataFrame([{
+        'precip': weather['precip'],
+        'Sea_Level_Anomaly': Sea_Level_Anomaly,
+        'temp': weather['temp'],
+        'humidity': weather['humidity'],
+        'windspeed': weather['windspeed']
 
     
       # Show river level rule-based prediction
@@ -183,7 +207,7 @@ if weather and river_level:
      # Also run the model prediction
     if city_info["type"] == "inland":
         if city_info["location"] == "Delhi,IN":
-            prediction1 = model1.predict(input_data)[0]
+            prediction1 = model1.predict(input_data1)[0]
             st.subheader("📊 Model-Based Prediction:")
             if prediction1 == 2:
                 st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
@@ -193,11 +217,30 @@ if weather and river_level:
                 st.success("✅ Model says: NO FLOOD expected today.")
    
         elif city_info["location"] == "Jalpaiguri,IN":
-            prediction2 = model2.predict(input_data)[0]
+            prediction2 = model2.predict(input_data1)[0]
             st.subheader("📊 Model-Based Prediction:")
             if prediction2 == 2:
                 st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
             elif prediction2 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
+    elif city_info["type"] == "coastal":
+        if city_info["location"] == "Mumbai,IN":
+            prediction3 = model3.predict(input_data2)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction3 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction3 == 1:
+                st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
+            else:
+                st.success("✅ Model says: NO FLOOD expected today.")
+        elif city_info["location"] == "Chennai,IN":
+            prediction4 = model4.predict(input_data2)[0]
+            st.subheader("📊 Model-Based Prediction:")
+            if prediction4 == 2:
+                st.error("🚩 Model says: FLOOD HIGHLY LIKELY – Stay safe!")
+            elif prediction4 == 1:
                 st.warning("⚠️ Model says: FLOOD LIKELY – Stay safe!")
             else:
                 st.success("✅ Model says: NO FLOOD expected today.")
@@ -208,6 +251,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
