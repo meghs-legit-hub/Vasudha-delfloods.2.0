@@ -183,41 +183,42 @@ if ready:
         }])
         
           # Show river level rule-based prediction
-        st.subheader("📢 Flood Risk Assessment")
-        if city_info["type"] == "inland":
-            if city_info["location"] == "Delhi,IN":
-                if river_level > 205.55:
-                    st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
-                elif river_level > 202:
-                    st.warning("🟠 WARNING: River flooding is POSSIBLE.")
-                else:
-                    st.success("🟢 River flooding is NOT EXPECTED.")
+    st.subheader("📢 Flood Risk Assessment")
+    if city_info["type"] == "inland":
+        if city_info["location"] == "Delhi,IN":
+            if river_level > 205.55:
+                st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
+            elif river_level > 202:
+                st.warning("🟠 WARNING: River flooding is POSSIBLE.")
+            else:
+                st.success("🟢 River flooding is NOT EXPECTED.")
                 
                 
             
-            elif city_info["location"] == "Jalpaiguri,IN":
-                if river_level > 87:
-                    st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
-                elif river_level > 85.1:
-                    st.warning("🟠 WARNING: River flooding is POSSIBLE.")
-                else:
-                    st.success("🟢 River flooding is NOT EXPECTED.")
+        elif city_info["location"] == "Jalpaiguri,IN":
+            if river_level > 87:
+                st.error("🔴 ALERT: River flooding WILL LIKELY occur.")
+            elif river_level > 85.1:
+                st.warning("🟠 WARNING: River flooding is POSSIBLE.")
+            else:
+                st.success("🟢 River flooding is NOT EXPECTED.")
                 
-        elif city_info["type"] == "coastal":
-            if city_info["location"] == "Mumbai,IN":
-                if sea_level_anomaly > 0.4:
-                    st.error("🔴 Coastal flooding VERY LIKELY.")
-                elif sea_level_anomaly > 0.3:
-                    st.warning("🟠 Elevated sea level detected.")
-                else:
-                    st.success("🟢 Coastal conditions stable.")
-            elif city_info["location"] == "Chennai,IN":
-                if sea_level_anomaly > 1.2:
-                    st.error("🔴 Coastal flooding VERY LIKELY.")
-                elif sea_level_anomaly > 1.0:
-                    st.warning("🟠 Elevated sea level detected.")
-                else:
-                    st.success("🟢 Coastal conditions stable.")
+    elif city_info["type"] == "coastal":
+        if city_info["location"] == "Mumbai,IN":
+            if sea_level_anomaly > 0.4:
+                st.error("🔴 Coastal flooding VERY LIKELY.")
+            elif sea_level_anomaly > 0.3:
+                st.warning("🟠 Elevated sea level detected.")
+            else:
+                st.success("🟢 Coastal conditions stable.")
+            
+        elif city_info["location"] == "Chennai,IN":
+            if sea_level_anomaly > 1.2:
+                st.error("🔴 Coastal flooding VERY LIKELY.")
+            elif sea_level_anomaly > 1.0:
+                st.warning("🟠 Elevated sea level detected.")
+            else:
+                st.success("🟢 Coastal conditions stable.")
     
     
          # Also run the model prediction
@@ -267,6 +268,7 @@ if ready:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
