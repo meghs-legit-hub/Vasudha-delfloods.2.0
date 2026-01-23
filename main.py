@@ -150,7 +150,7 @@ weather = fetch_weather_data(city_info["location"])
 
 
 # Make prediction if both inputs are ready
-if weather and river_level:
+if weather:
     st.subheader("📊 Today's Weather Data:") #st.subheader("📊 Live Environmental Data")
     st.json(weather)
 
@@ -259,6 +259,7 @@ if weather and river_level:
 
 
 #st.write("✅ Model accuracy on test data:", accuracy)
+
 
 
 
